@@ -3,14 +3,13 @@ import math
 
 x, y = symbols('x y')
 variables = [x,y]
-_function = 2.5*((x**2-y)**2)+(1-x)**2
-#_function = x**2 + y**2
+_function = 2*(x**2-y)**2 + (1-x)**2
 
 gradient = [diff(_function, variable) for variable in variables]
 
-START = [-0.5, 1]
-HOP_LENGTH = 0.01
-ACCURACY = 0.001
+START = [0.5,1]
+HOP_LENGTH = 0.05
+ACCURACY = 0.01
 
 def calculate_next_hop_length(direction, last_step):
     if all(elem == 0 for elem in direction): return 0
@@ -24,9 +23,9 @@ def calculate_next_hop_length(direction, last_step):
     return _mininum
 
 def get_next_hop_length(last_step, iteration_number):
-    #return 0.03 * iteration_number**0.5
-    new_direction = calculate_gradient(last_step)
-    return calculate_next_hop_length(new_direction, last_step)
+    return 0.03 * iteration_number**0.5
+    """new_direction = calculate_gradient(last_step)
+    return calculate_next_hop_length(new_direction, last_step)"""
 
 def get_next_step(last_step, hop_length):
     variables_values = [(variable, last_step[idx]) for idx, variable in enumerate(variables)]
@@ -49,15 +48,15 @@ def calculate_gradient(point):
 
 def find_minimum():
     step_number = 1
-    initial_hop_length = get_next_hop_length(START, iteration_number=step_number) #changeable hop length
-    #initial_hop_length = HOP_LENGTH #const hop length
+    #initial_hop_length = get_next_hop_length(START, iteration_number=step_number) #changeable hop length
+    initial_hop_length = HOP_LENGTH #const hop length
     last_step = START
     next_step = get_next_step(START, initial_hop_length)
     while not is_accurate_enough(last_step, next_step) and step_number < 1000:
         print(f"not yet: {step_number} iteration, {next_step}")
         last_step = next_step
-        new_hop_length = get_next_hop_length(last_step, iteration_number=step_number) #changeable hop length
-        #new_hop_length = HOP_LENGTH #const hop length
+        #new_hop_length = get_next_hop_length(last_step, iteration_number=step_number) #changeable hop length
+        new_hop_length = HOP_LENGTH #const hop length
         next_step = get_next_step(last_step, new_hop_length)
         step_number += 1
     return next_step, step_number
